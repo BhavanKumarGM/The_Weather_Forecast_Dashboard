@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🌦 Advanced Weather Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2, #ff758c, #ff7eb3);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+        .container { padding: 20px; }
+        .search-box input {
+            padding: 12px; border-radius: 10px; border: none; width: 220px; outline: none; font-size: 16px;
+        }
+        .search-box button {
+            padding: 12px 20px; border: none; background: #ff9800; color: white; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s;
+        }
+        .search-box button:hover { background: #ff5722; transform: scale(1.05); }
+        .card {
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); padding: 25px; border-radius: 18px; margin: 20px auto; width: 350px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3); animation: fadeIn 1s ease-in-out;
+        }
+        .forecast { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 25px; }
+        .forecast-card {
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 15px; border-radius: 15px; width: 140px; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .forecast-card:hover { transform: translateY(-8px) scale(1.05); background: rgba(255,255,255,0.25); }
+        h1 { font-size: 2.5em; margin-bottom: 20px; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+        h2 { margin: 10px 0; }
+        canvas { margin-top: 30px; background: rgba(255,255,255,0.15); border-radius: 15px; padding: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 Advanced Weather Dashboard</h1>
+        <form method="POST" class="search-box">
+            <input type="text" name="city" placeholder="Enter city" required>
+            <button type="submit">🔍 Search</button>
+        </form>
+
+        {% if weather %}
+            <div class="card">
+                {% if weather.error %}
+                    <p style="color: red; font-weight: bold;">{{ weather.error }}</p>
+                {% else %}
+                    <h2>{{ weather.city }}</h2>
+                    <img src="http://openweathermap.org/img/wn/{{ weather.icon }}@2x.png">
+                    <p><b>{{ weather.description }}</b></p>
+                    <p>🌡 Temperature: {{ weather.temperature }} °C</p>
+                    <p>💧 Humidity: {{ weather.humidity }}%</p>
+                    <p>🔽 Pressure: {{ weather.pressure }} hPa</p>
+                    <p>💨 Wind Speed: {{ weather.wind_speed }} m/s</p>
+                    <p>👁 Visibility: {{ weather.visibility }} m</p>
+                    <p>🌅 Sunrise: {{ weather.sunrise }} | 🌇 Sunset: {{ weather.sunset }}</p>
+                    <p>🌫 Air Quality Index (AQI): {{ weather.aqi }}</p>
+                {% endif %}
+            </div>
+
+            {% if forecast %}
+            <h2>📅 5-Day Forecast</h2>
+            <div class="forecast">
+                {% for day in forecast %}
+                    <div class="forecast-card">
+                        <h4>{{ day.date }}</h4>
+                        <img src="http://openweathermap.org/img/wn/{{ day.icon }}.png">
+                        <p>{{ day.temp }} °C</p>
+                        <p>{{ day.desc }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <canvas id="forecastChart" width="400" height="200"></canvas>
+            <script>
+                var ctx = document.getElementById('forecastChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [{% for day in forecast %}"{{ day.date }}",{% endfor %}],
+                        datasets: [{
+                            label: 'Temperature (°C)',
+                            data: [{% for day in forecast %}{{ day.temp }},{% endfor %}],
+                            borderColor: '#ffeb3b',
+                            backgroundColor: 'rgba(255,235,59,0.2)',
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        plugins: { legend: { labels: { color: "white" } } },
+                        scales: { x: { ticks: { color: "white" } }, y: { ticks: { color: "white" } } }
+                    }
+                });
+            </script>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
