@@ -46,3 +46,11 @@ An **interactive, feature-rich weather dashboard** built with **Flask** that pro
 ```bash
 git clone https://github.com/YOUR_USERNAME/Weather_Forecast_Dashboard.git
 cd Weather_Forecast_Dashboard
+
+# Author🧑‍💻
+
+Bhavan Kumar GM
+
+GitHub: BhavanKumarGM
+
+Email: gmbhavankumar@gmail.com
