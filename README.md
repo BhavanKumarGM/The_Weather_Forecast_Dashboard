@@ -39,13 +39,17 @@ An **interactive, feature-rich weather dashboard** built with **Flask** that pro
 
 ---
 
-## ⚡ Installation & Setup
+# ⚡ Installation & Setup
 
 1. **Clone the repository**
 
-```bash
 git clone https://github.com/YOUR_USERNAME/Weather_Forecast_Dashboard.git
 cd Weather_Forecast_Dashboard
+
+git clone https://github.com/YOUR_USERNAME/Weather_Forecast_Dashboard.git
+cd Weather_Forecast_Dashboard
+
+---
 
 # Author🧑‍💻
 
